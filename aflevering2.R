@@ -96,4 +96,56 @@ bribe.data$month = str_extract(bribe.data$date, "[A-z]*+")
 
 
 
+#==================================================================================================
+#Loop2
+
+
+#defining the objects we want to scrape:
+data = list()
+link = "http://www.ipaidabribe.com/reports/paid?page="
+
+#creating a vector with the pagenumbers ending the URL for each page
+page <- c(seq(0,990,10))
+
+#creating a vector consisting of URL links to the first 100 pages
+listoflinks = paste0(link, page)
+
+#Creating a function that extracts the correct data from a given URL input
+extraction_function = function(link) {
+  site = html(link)
+  department = site %>%
+    html_nodes(css = css.selector.department) %>%
+    html_text()
+  location = site  %>% 
+    html_nodes(css = css.selector.location) %>%
+    html_text ()
+  date = site  %>% 
+    html_nodes(css = css.selector.date) %>% 
+    html_text ()
+  amount = site  %>%
+    html_nodes(css = css.selector.amount) %>% 
+    html_text ()
+  detail = site  %>%
+    html_nodes(css = css.selector.detail) %>% 
+    html_text ()
+  views = site  %>%
+    html_nodes(css = css.selector.views) %>% 
+    html_text ()
+  ID = site  %>%
+    html_nodes(css = css.selector.ID) %>% 
+    html_text () 
+  return(cbind(department, location, date, amount, detail, views, ID))
+}
+
+#Looping the function with all the links in the above defined vector
+for (i in seq_along(listoflinks)) {
+  data[[i]] = extraction_function(listoflinks[i])
+  Sys.sleep(1)
+}
+
+#Converting the list of lists into a dataframe and tjekking variables & nr. of observations
+df.data = ldply(data)
+glimpse(df.data)
+nrow(df.data)
+
 
