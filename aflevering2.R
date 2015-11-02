@@ -71,6 +71,28 @@ to=2
     cat(" done!\n")
   }
 
+ns data
+
+#beløb
+bribe.data$size_big = str_extract(bribe.data$amount, "[0-9]+,[0-9]+,[0-9]+|[0-9]+,[0-9]+")
+bribe.data$size_small = str_extract(bribe.data$amount, "[0-9]+")
+bribe.data = transform(bribe.data, size = ifelse(!is.na(size_big), size_big, size_small))
+
+#antal visninger
+bribe.data$views_big = str_extract(bribe.data$views, "[0-9]+,[0-9]+,[0-9]+|[0-9]+,[0-9]+")
+bribe.data$views_small = str_extract(bribe.data$views, "[0-9]+")
+bribe.data = transform(bribe.data, size = ifelse(!is.na(views_num), views_big, views_small))
+
+#stat og by
+bribe.data$city= str_extract(bribe.data$location, "[A-z]*+")
+bribe.data$state= str_extract(bribe.data$location, ", [A-z]*+")
+bribe.data$state = gsub(", ", "", bribe.data$state)
+
+#dato, mdr og år
+bribe.data$year = str_extract(bribe.data$date, ", [0-9]*+")
+bribe.data$year = gsub(", ", "", bribe.data$year)
+bribe.data$month = str_extract(bribe.data$date, "[A-z]*+")
+ 
 
 
 
