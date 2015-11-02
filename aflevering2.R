@@ -71,7 +71,7 @@ to=2
     cat(" done!\n")
   }
 
-ns data
+#rens data
 
 #beløb
 bribe.data$size_big = str_extract(bribe.data$amount, "[0-9]+,[0-9]+,[0-9]+|[0-9]+,[0-9]+")
